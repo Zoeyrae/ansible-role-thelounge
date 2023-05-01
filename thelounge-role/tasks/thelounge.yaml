@@ -1,0 +1,27 @@
+- block:
+    - name: Determine latest GitHub release (local)
+      delegate_to: localhost
+      become: false
+      uri:
+        url: "https://github.com/thelounge/thelounge/releases/latest"
+        body_format: json
+      register: _github_release
+      until: _github_release.status == 200
+      retries: 5
+
+    - name: Set (thelounge_version
+      set_fact:
+        thelounge_version: "{{ _github_release.json.tag_name
+          | regex_replace('^v?(.*)$', '\\1') }}"
+
+  when: (thelounge_version is not defined) or (thelounge_version == 'latest')
+
+
+    - name: Download latest version
+        delegate_to: localhost
+        become: false
+        get_url:
+          url: "https://github.com/thelounge/thelounge/releases/download/v{{ (thelounge_version }}
+            /thelounge-{{ thelounge_version }}.deb"
+          dest: "$HOME/downloads/thelounge.deb"
+  run_once: true
