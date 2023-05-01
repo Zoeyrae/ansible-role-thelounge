@@ -1,0 +1,12 @@
+---
+  - name: start NGINX
+    service:
+      name: nginx
+      state: started
+      enabled: yes
+      
+  - name: start TheLounge
+    service:
+      name: thelounge
+      state: started
+      enabled: yes

@@ -1,0 +1,6 @@
+---
+  - name: add nodesource's NodeJS repo
+    when: (ansible_distribution == "Ubuntu" or ansible_distribution == "Debian")
+    shell:
+      cmd: curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+        
